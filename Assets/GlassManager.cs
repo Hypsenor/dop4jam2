@@ -1,78 +1,112 @@
-﻿using UnityEngine;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class GlassManager : MonoBehaviour
 {
-    public GameObject[] allGlassPanels;
-    public Light overheadSpotlight; // Tek ışık objesi
+    public static GlassManager Instance;
 
-    private List<int> safeGlassIndices = new List<int>();
-    private List<Transform> breakableTargets = new List<Transform>();
-
-    private float timer = 0f;
-    private bool lightActive = true;
-
-    void Start()
+    [System.Serializable]
+    public class GlassGroup
     {
-        int count = allGlassPanels.Length;
+        public GameObject[] glasses; // Her 3’lü cam grubu
+    }
 
-        if (count % 3 != 0)
+    public List<GlassGroup> glassGroups = new List<GlassGroup>();
+
+    public Material normalMaterial;      // sağlam cam materyali
+    public Material breakableMaterial;   // kırmızı cam materyali
+
+    [HideInInspector]
+    public List<GlassPieceController> breakableGlassControllers = new List<GlassPieceController>();
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        DeactivateAllBrokenGlass();       // oyun başında kırıkları kapat
+        AssignBreakableGlasses();         // rastgele 2 cam seç
+        StartCoroutine(ShowBreakableGlassMaterial()); // 5 saniye kırmızı göster
+    }
+
+    void DeactivateAllBrokenGlass()
+    {
+        foreach (var group in glassGroups)
         {
-            Debug.LogError("Cam sayısı 3'ün katı olmalı!");
-            return;
-        }
-
-        for (int i = 0; i < count; i += 3)
-        {
-            List<int> group = new List<int> { i, i + 1, i + 2 };
-            int safeIndex = Random.Range(0, 3);
-            int safeGlobal = group[safeIndex];
-            safeGlassIndices.Add(safeGlobal);
-
-            for (int j = 0; j < 3; j++)
+            foreach (var glassObj in group.glasses)
             {
-                int index = group[j];
-
-                if (index != safeGlobal)
+                GlassPieceController controller = glassObj.GetComponent<GlassPieceController>();
+                if (controller != null && controller.brokenVersion != null)
                 {
-                    // Kırılabilir cam → hedef listesine ekle
-                    breakableTargets.Add(allGlassPanels[index].transform);
+                    controller.brokenVersion.SetActive(false); // kırığı kapat
+                    glassObj.SetActive(true);                  // sağlamı aç
                 }
             }
         }
-
-        PositionLightToCoverTargets();
     }
 
-    void Update()
+    void AssignBreakableGlasses()
     {
-        timer += Time.deltaTime;
+        breakableGlassControllers.Clear();
 
-        if (lightActive && timer >= 5f)
+        foreach (var group in glassGroups)
         {
-            if (overheadSpotlight != null)
-                overheadSpotlight.enabled = false;
+            if (group.glasses.Length != 3)
+            {
+                Debug.LogWarning("Her grup 3 cam içermeli!");
+                continue;
+            }
 
-            lightActive = false;
+            List<int> indices = new List<int> { 0, 1, 2 };
+
+            // 3 camdan rastgele 2 tanesini kırılabilir seç
+            for (int i = 0; i < 2; i++)
+            {
+                int randomIndex = Random.Range(0, indices.Count);
+                int selected = indices[randomIndex];
+                indices.RemoveAt(randomIndex);
+
+                GameObject glassObj = group.glasses[selected];
+                GlassPieceController controller = glassObj.GetComponent<GlassPieceController>();
+
+                if (controller != null)
+                {
+                    breakableGlassControllers.Add(controller);
+                }
+                else
+                {
+                    Debug.LogError($"{glassObj.name} üzerinde GlassPieceController component’i yok!");
+                }
+            }
         }
     }
 
-    void PositionLightToCoverTargets()
+    IEnumerator ShowBreakableGlassMaterial()
     {
-        if (overheadSpotlight == null || breakableTargets.Count == 0) return;
-
-        // Ortalamayı al
-        Vector3 center = Vector3.zero;
-        foreach (Transform t in breakableTargets)
+        // Kırılabilir camları 5 saniye boyunca kırmızı yap
+        foreach (var glass in breakableGlassControllers)
         {
-            center += t.position;
+            SetMaterial(glass.gameObject, breakableMaterial);
         }
-        center /= breakableTargets.Count;
 
-        // Işığı yukarıdan bu merkeze yönlendir
-        Vector3 lightPosition = center + Vector3.up * 10f; // yukarıdan bakacak
-        overheadSpotlight.transform.position = lightPosition;
-        overheadSpotlight.transform.LookAt(center);
+        yield return new WaitForSeconds(5f);
+
+        // Materyalleri geri eski haline döndür
+        foreach (var glass in breakableGlassControllers)
+        {
+            SetMaterial(glass.gameObject, normalMaterial);
+        }
+    }
+
+    void SetMaterial(GameObject obj, Material mat)
+    {
+        Renderer rend = obj.GetComponent<Renderer>();
+        if (rend != null)
+        {
+            rend.material = mat;
+        }
     }
 }
-
