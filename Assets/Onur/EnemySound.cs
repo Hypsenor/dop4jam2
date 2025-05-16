@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class EnemySound : MonoBehaviour
 {
-    public AudioClip enemyAudioClip;  // Assign the audio clip in the Unity Editor
-    public float proximityRange = 10f;  // Set the desired proximity range
+    public AudioClip enemyAudioClip;
+    public float proximityRange = 10f;
 
     private AudioSource audioSource;
     private Transform player;
@@ -16,13 +16,10 @@ public class EnemySound : MonoBehaviour
 
     private void Update()
     {
-        // Check the distance to the player
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // Check if the player is within the proximity range
         if (distanceToPlayer < proximityRange)
         {
-            // If the audio is not playing, start playing it
             if (!audioSource.isPlaying)
             {
                 audioSource.clip = enemyAudioClip;
@@ -32,8 +29,13 @@ public class EnemySound : MonoBehaviour
         }
         else
         {
-            // If the player is outside the proximity range, stop the audio
             audioSource.Stop();
         }
+    }
+
+    public void StopProximitySound()
+    {
+        if (audioSource.isPlaying)
+            audioSource.Stop();
     }
 }
