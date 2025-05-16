@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6502045806822383022}
   - component: {fileID: 1253802490961653709}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camerabob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,7 +64,7 @@ GameObject:
   - component: {fileID: 9119224132752123074}
   - component: {fileID: 6232775148218870606}
   - component: {fileID: 1376756465451394083}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 8408666751264980678}
   - component: {fileID: 4218057160196570977}
   - component: {fileID: 7721561812607107939}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -329,9 +329,9 @@ GameObject:
   - component: {fileID: 2521653056470541038}
   - component: {fileID: 1799893804086468065}
   - component: {fileID: 4402612573165100688}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

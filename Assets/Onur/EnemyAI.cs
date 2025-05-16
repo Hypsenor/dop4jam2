@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -16,6 +17,15 @@ public class EnemyAI : MonoBehaviour
         if (player != null)
         {
             agent.SetDestination(player.position);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform == player)
+        {
+            Destroy(player.gameObject);
+            SceneManager.LoadScene("Menu");
         }
     }
 }
