@@ -64,7 +64,7 @@ public class GlassManager : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (isRedActive && timer >= 1f)
+        if (isRedActive && timer >= 5f)
         {
             // Kýrmýzý camlarý geri eski rengine döndür
             for (int i = 0; i < glassRenderers.Length; i++)
@@ -84,3 +84,4 @@ public class GlassManager : MonoBehaviour
         return safeGlassIndices;
     }
 }
+
