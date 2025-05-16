@@ -120,6 +120,7 @@ NavMeshSettings:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &106828442
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,6 +801,8 @@ MeshFilter:
   m_Mesh: {fileID: -5495902117074765545, guid: 54a86aa2a2dd10e4cb0eab6cbe67a0e4, type: 3}
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 --- !u!1 &472357861
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,7 +814,10 @@ GameObject:
   - component: {fileID: 472357863}
   - component: {fileID: 472357862}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - component: {fileID: 472357864}
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   m_Layer: 0
@@ -901,6 +907,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 --- !u!114 &472357864
 MonoBehaviour:
@@ -1388,6 +1395,8 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 --- !u!1 &835853123
 GameObject:
   m_ObjectHideFlags: 0
@@ -1480,6 +1489,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 --- !u!1 &837323140
 GameObject:
@@ -2865,12 +2875,15 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 835853126}
   - {fileID: 472357863}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   - {fileID: 219616781}
   - {fileID: 1063575988}
@@ -2881,5 +2894,7 @@ SceneRoots:
   - {fileID: 619429357}
   - {fileID: 723280793}
   - {fileID: 1926781790}
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
