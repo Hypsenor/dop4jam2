@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene("Onur");
+        SceneManager.LoadScene("level");
     }
 
     public void QuitGame()

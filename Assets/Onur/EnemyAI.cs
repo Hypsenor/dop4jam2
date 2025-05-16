@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
@@ -8,19 +7,28 @@ public class EnemyAI : MonoBehaviour
     [Header("References")]
     public Transform player;
     public GameObject jumpscareImage;
-    public AudioSource jumpscareAudio;   
+    public AudioSource jumpscareAudio;
+    public EnemySound enemySound;       // proximity sound ref
 
     [Header("Timings")]
     public float preSoundDelay = 0.2f;
     public float menuDelay = 1.0f;
 
-    private NavMeshAgent agent;
-    private EnemySound enemySound;      // EnemySound referans
+    [Header("Flying Chase")]
+    public bool flyAlways = true;       // true: hep uï¿½sun
+    public float flySpeed = 6f;
+    public float rotateSpeed = 5f;
+
+    private UnityEngine.AI.NavMeshAgent agent;
+    private float fixedY;               // sabit yï¿½kseklik
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        enemySound = GetComponent<EnemySound>();    
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        if (flyAlways && agent != null)
+            agent.enabled = false;      // NavMeshï¿½i kapatï¿½yoruz
+
+        fixedY = transform.position.y;  // baï¿½langï¿½ï¿½taki yï¿½kseklik
 
         if (jumpscareImage != null)
             jumpscareImage.SetActive(false);
@@ -28,40 +36,50 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        if (player != null)
+        if (player == null) return;
+
+        if (flyAlways)
+        {
+            // Hedef pozisyonu: player'ï¿½n x,z'si, bizim fixedY'miz
+            Vector3 target = new Vector3(player.position.x, fixedY, player.position.z);
+            // Yï¿½nelim
+            Vector3 dir = (target - transform.position).normalized;
+            if (dir.sqrMagnitude > 0.001f)
+            {
+                Quaternion look = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, look, Time.deltaTime * rotateSpeed);
+            }
+            // ï¿½lerleme
+            transform.position += transform.forward * flySpeed * Time.deltaTime;
+        }
+        else
+        {
+            // Geleneksel NavMesh yaklaï¿½ï¿½mï¿½ (eski kod)
             agent.SetDestination(player.position);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
-            Debug.Log("Sahurcu seni yakaladý!");
             StartCoroutine(JumpscareSequence());
-        }
     }
 
     private IEnumerator JumpscareSequence()
     {
-    
         if (enemySound != null)
             enemySound.StopProximitySound();
 
-     
         if (jumpscareImage != null)
             jumpscareImage.SetActive(true);
 
-      
         yield return new WaitForSeconds(preSoundDelay);
 
-     
         if (jumpscareAudio != null)
             jumpscareAudio.Play();
 
-       
         yield return new WaitForSeconds(menuDelay);
 
-      
         if (player != null)
             Destroy(player.gameObject);
 
